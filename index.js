@@ -151,6 +151,7 @@ axios.get(API_URL).then((response) => {
 				.addFields(
 					{ name: 'Get all notes of specific subjects', value: '/notes' },
 					{ name: 'Get Notes of specific topic', value: '/getnotes/<Topic Code>', },
+					{ name: 'Get Text of specific Subjects', value: '/texts', },
 				)
 				.setTimestamp()
 
