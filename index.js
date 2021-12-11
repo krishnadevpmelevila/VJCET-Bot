@@ -88,6 +88,41 @@ axios.get(API_URL).then((response) => {
 		}
 	});
 	client.on('interactionCreate', async interaction => {
+		flag = false
+		if (!interaction.isCommand()) return;
+
+		if (interaction.commandName === 'texts') {
+			
+			const row = new MessageActionRow()
+				.addComponents(
+					new MessageButton()
+						.setCustomId('tbce')
+						.setLabel('BCE')
+						.setStyle('PRIMARY'),
+					new MessageButton()
+						.setCustomId('tbme')
+						.setLabel('BME')
+						.setStyle('PRIMARY'),
+					new MessageButton()
+						.setCustomId('tls')
+						.setLabel('LS')
+						.setStyle('PRIMARY'),
+					new MessageButton()
+						.setCustomId('tem')
+						.setLabel('EM')
+						.setStyle('PRIMARY'),
+					new MessageButton()
+						.setCustomId('tothers')
+						.setLabel('Others')
+						.setStyle('PRIMARY'),
+				);
+
+			await interaction.reply({
+				content: 'Select Subject To Get Text!', components: [row]
+			});
+		}
+	});
+	client.on('interactionCreate', async interaction => {
 
 		if (!interaction.isCommand()) return;
 
@@ -155,6 +190,46 @@ axios.get(API_URL).then((response) => {
 
 
 		}
+		if (interaction.customId === 'tbce') {
+
+			newData[0].forEach(element => {
+				if (element.sub == 'BCE' && element.type=='text') {
+
+					
+	
+					interaction.channel.send(element.link).catch(err => { });
+					flag = true
+				}
+
+
+			});
+			if (!flag) {
+				interaction.reply("No texts available").catch(err => { });
+			}
+
+
+
+		}
+		if (interaction.customId === 'tbme') {
+
+			newData[0].forEach(element => {
+				if (element.sub == 'BME' && element.type=='text') {
+
+					
+	
+					interaction.channel.send(element.link).catch(err => { });
+					flag = true
+				}
+
+
+			});
+			if (!flag) {
+				interaction.reply("No texts available").catch(err => { });
+			}
+
+
+
+		}
 		if (interaction.customId === 'bme') {
 			
 			newData[0].forEach(element => {
@@ -178,6 +253,26 @@ axios.get(API_URL).then((response) => {
 			});
 			if (!flag) {
 				interaction.reply("No notes available").catch(err => { });
+			}
+
+
+
+		}
+		if (interaction.customId === 'tls') {
+
+			newData[0].forEach(element => {
+				if (element.sub == 'LS' && element.type=='text') {
+
+					
+	
+					interaction.channel.send(element.link).catch(err => { });
+					flag = true
+				}
+
+
+			});
+			if (!flag) {
+				interaction.reply("No texts available").catch(err => { });
 			}
 
 
@@ -209,6 +304,26 @@ axios.get(API_URL).then((response) => {
 
 
 		}
+		if (interaction.customId === 'tem') {
+
+			newData[0].forEach(element => {
+				if (element.sub == 'EM' && element.type=='text') {
+
+					
+	
+					interaction.channel.send(element.link).catch(err => { });
+					flag = true
+				}
+
+
+			});
+			if (!flag) {
+				interaction.reply("No texts available").catch(err => { });
+			}
+
+
+
+		}
 		if (interaction.customId === 'em') {
 			
 			newData[0].forEach(element => {
@@ -230,6 +345,26 @@ axios.get(API_URL).then((response) => {
 			});
 			if (!flag) {
 				interaction.reply("No notes available").catch(err => { });
+			}
+
+
+
+		}
+		if (interaction.customId === 'tpss') {
+
+			newData[0].forEach(element => {
+				if (element.sub == 'PSS' && element.type=='text') {
+
+					
+	
+					interaction.channel.send(element.link).catch(err => { });
+					flag = true
+				}
+
+
+			});
+			if (!flag) {
+				interaction.reply("No text available").catch(err => { });
 			}
 
 
@@ -261,6 +396,26 @@ axios.get(API_URL).then((response) => {
 
 
 		}
+		if (interaction.customId === 'tlca') {
+
+			newData[0].forEach(element => {
+				if (element.sub == 'LCA' && element.type=='text') {
+
+					
+	
+					interaction.channel.send(element.link).catch(err => { });
+					flag = true
+				}
+
+
+			});
+			if (!flag) {
+				interaction.reply("No texts available").catch(err => { });
+			}
+
+
+
+		}
 		if (interaction.customId === 'lca') {
 			
 			newData[0].forEach(element => {
@@ -287,15 +442,15 @@ axios.get(API_URL).then((response) => {
 
 
 		}
-		if (interaction.customId === 'others') {
+		if (interaction.customId === 'tothers') {
 			const row = new MessageActionRow()
 				.addComponents(
 					new MessageButton()
-						.setCustomId('lca')
+						.setCustomId('tlca')
 						.setLabel('LC and A')
 						.setStyle('PRIMARY'),
 					new MessageButton()
-						.setCustomId('pss')
+						.setCustomId('tpss')
 						.setLabel('PSS')
 						.setStyle('PRIMARY'),
 
@@ -303,7 +458,7 @@ axios.get(API_URL).then((response) => {
 				);
 
 			await interaction.reply({
-				content: 'Select Subject!', components: [row]
+				content: 'Select Subject To Get Texts!', components: [row]
 			});
 		}
 
