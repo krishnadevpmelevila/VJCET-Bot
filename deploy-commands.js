@@ -10,6 +10,7 @@ const commands = [
 	new SlashCommandBuilder().setName('texts').setDescription('Get all Texts of Subject'),
 	new SlashCommandBuilder().setName('help').setDescription('Get all Commands'),
 	new SlashCommandBuilder().setName('getnotes').setDescription('Get Specific Notes').addStringOption(option => option.setName('input').setDescription('Enter Topic Code').setRequired(true)),
+	new SlashCommandBuilder().setName('timetable').setDescription('Get Timetable Of CSEA S1').addStringOption(option => option.setName('category').setDescription('Offline/Online').addChoice('Offline Timetable', 'offline').addChoice('Online Timetable', 'online').setRequired(true))
 
 ]
 	.map(command => command.toJSON());

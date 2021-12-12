@@ -130,6 +130,16 @@ axios.get(API_URL).then((response) => {
 
 		if (!interaction.isCommand()) return;
 
+		if (interaction.commandName === 'timetable') {
+			const choice = interaction.options.getString('input');
+			console.log(choice);
+			
+		}
+	});
+	client.on('interactionCreate', async interaction => {
+
+		if (!interaction.isCommand()) return;
+
 		if (interaction.commandName === 'getnotes') {
 			const string = interaction.options.getString('input');
 			
