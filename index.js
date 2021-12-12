@@ -131,8 +131,23 @@ axios.get(API_URL).then((response) => {
 		if (!interaction.isCommand()) return;
 
 		if (interaction.commandName === 'timetable') {
-			const choice = interaction.options.getString('input');
-			console.log(interaction);
+			
+			const row = new MessageActionRow()
+				.addComponents(
+					new MessageButton()
+						.setCustomId('offline')
+						.setLabel('Offline Timetable')
+						.setStyle('PRIMARY'),
+					new MessageButton()
+						.setCustomId('online')
+						.setLabel('Online Timetable')
+						.setStyle('PRIMARY'),
+					
+				);
+
+			await interaction.reply({
+				content: 'Select Subject To Get Time Table!', components: [row]
+			});
 			
 		}
 	});
