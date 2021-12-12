@@ -181,6 +181,7 @@ axios.get(API_URL).then((response) => {
 					{ name: 'Get all notes of specific subjects', value: '/notes' },
 					{ name: 'Get Notes of specific topic', value: '/getnotes/<Topic Code>', },
 					{ name: 'Get Text of specific Subjects', value: '/texts', },
+					{ name: 'Get Timetable Of CSEA S1', value: '/timetable', },
 				)
 				.setTimestamp()
 
@@ -188,15 +189,17 @@ axios.get(API_URL).then((response) => {
 		}
 	});
 	client.on('interactionCreate', async interaction => {
-		if(!interaction.isCommand()) return;
+		if(!interaction.isCommand) return;
 		if (!interaction.isButton) return;
-		if(interaction.commandName === 'offline'){
-			interaction.reply('wait',{files:[
-				"oftimetable.jpeg"
+		if(interaction.customId === 'offline'){
+			interaction.reply({files: [
+				'oftimetable.jpeg'
 			]})
 		}
-		if(interaction.commandName === 'online'){
-			
+		if(interaction.customId === 'online'){
+			interaction.reply({files: [
+				'ontimetable.jpg'
+			]})
 		}
 	
 	})
