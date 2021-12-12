@@ -4,7 +4,8 @@
   "description": "Exclusive Discord bot of VJCET Muvattupuzha",
   "main": "index.js",
   "scripts": {
-    "start": "node deploy-commands.js && nodemon index.js"
+    "start": "nodemon index.js",
+    "deploy":"node deploy-commands.js"
   },
   "author": "Krishnadev P Melevila",
   "license": "ISC",
