@@ -191,7 +191,9 @@ axios.get(API_URL).then((response) => {
 		if(!interaction.isCommand()) return;
 		if (!interaction.isButton) return;
 		if(interaction.commandName === 'offline'){
-			// use from here
+			interaction.reply({files:[
+				"oftimetable.jpeg"
+			]})
 		}
 		if(interaction.commandName === 'online'){
 			
