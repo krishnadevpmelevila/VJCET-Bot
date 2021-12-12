@@ -146,7 +146,7 @@ axios.get(API_URL).then((response) => {
 				);
 
 			await interaction.reply({
-				content: 'Select Subject To Get Time Table!', components: [row]
+				content: 'Select Type To Get Time Table!', components: [row]
 			});
 			
 		}
@@ -187,7 +187,17 @@ axios.get(API_URL).then((response) => {
 			interaction.reply({ embeds: [exampleEmbed] });
 		}
 	});
-
+	client.on('interactionCreate', async interaction => {
+		if(!interaction.isCommand()) return;
+		if (!interaction.isButton) return;
+		if(interaction.commandName === 'offline'){
+			// use from here
+		}
+		if(interaction.commandName === 'online'){
+			
+		}
+	
+	})
 	client.on('interactionCreate', async interaction => {
 		if (!interaction.isCommand) return;
 		if (!interaction.isButton) return;
