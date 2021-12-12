@@ -132,7 +132,7 @@ axios.get(API_URL).then((response) => {
 
 		if (interaction.commandName === 'timetable') {
 			const choice = interaction.options.getString('input');
-			console.log(choice);
+			console.log(interaction);
 			
 		}
 	});
