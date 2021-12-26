@@ -9,6 +9,7 @@ const commands = [
   new SlashCommandBuilder().setName('notes').setDescription('Get all Notes of Subject'),
   new SlashCommandBuilder().setName('texts').setDescription('Get all Texts of Subject'),
   new SlashCommandBuilder().setName('help').setDescription('Get all Commands'),
+  new SlashCommandBuilder().setName('clearchat').setDescription('Clear all chats on this channel'),
   new SlashCommandBuilder().setName('getnotes').setDescription('Get Specific Notes').addStringOption(option => option.setName('input').setDescription('Enter Topic Code').setRequired(true)),
   new SlashCommandBuilder().setName('timetable').setDescription('Get Timetable')
 

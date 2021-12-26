@@ -1,6 +1,6 @@
 const fs = require('fs');
-const { Client, Collection, Intents, InteractionCollector } = require('discord.js');
-const { token,API_URL } = require('./config.json');
+const { Client, Collection, Intents, InteractionCollector, Message } = require('discord.js');
+const { token, API_URL } = require('./config.json');
 const { MessageActionRow, MessageButton } = require('discord.js');
 const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
 const axios = require('axios');
@@ -43,10 +43,10 @@ client.commands = new Collection();
 
 
 axios.get(API_URL).then((response) => {
-	
+
 	store.push({ data: response.data })
 	newData.push(store[0].data)
-	
+
 	client.on('interactionCreate', async interaction => {
 		if (!interaction.isCommand()) return;
 		if (interaction.commandName === 'getnotes') {
@@ -61,7 +61,7 @@ axios.get(API_URL).then((response) => {
 		if (!interaction.isCommand()) return;
 
 		if (interaction.commandName === 'notes') {
-			
+
 			const row = new MessageActionRow()
 				.addComponents(
 					new MessageButton()
@@ -96,7 +96,7 @@ axios.get(API_URL).then((response) => {
 		if (!interaction.isCommand()) return;
 
 		if (interaction.commandName === 'texts') {
-			
+
 			const row = new MessageActionRow()
 				.addComponents(
 					new MessageButton()
@@ -131,7 +131,7 @@ axios.get(API_URL).then((response) => {
 		if (!interaction.isCommand()) return;
 
 		if (interaction.commandName === 'timetable') {
-			
+
 			const row = new MessageActionRow()
 				.addComponents(
 					new MessageButton()
@@ -142,13 +142,13 @@ axios.get(API_URL).then((response) => {
 						.setCustomId('online')
 						.setLabel('Online Timetable')
 						.setStyle('PRIMARY'),
-					
+
 				);
 
 			await interaction.reply({
 				content: 'Select Type To Get Time Table!', components: [row]
 			});
-			
+
 		}
 	});
 	client.on('interactionCreate', async interaction => {
@@ -157,13 +157,13 @@ axios.get(API_URL).then((response) => {
 
 		if (interaction.commandName === 'getnotes') {
 			const string = interaction.options.getString('input');
-			
+
 			newData[0].forEach(element => {
 				if (element.uuid == string) {
 					interaction.reply(element.link).catch(err => { });
 					flag = true
-				} 
-				
+				}
+
 			});
 			if (!flag) {
 				interaction.reply("No notes available").catch(err => { });
@@ -182,6 +182,7 @@ axios.get(API_URL).then((response) => {
 					{ name: 'Get Notes of specific topic', value: '/getnotes/<Topic Code>', },
 					{ name: 'Get Text of specific Subjects', value: '/texts', },
 					{ name: 'Get Timetable Of CSEA S1', value: '/timetable', },
+					{ name: 'Clear all chats (Only For Moderators)', value: '/clearchat', }
 				)
 				.setTimestamp()
 
@@ -189,19 +190,46 @@ axios.get(API_URL).then((response) => {
 		}
 	});
 	client.on('interactionCreate', async interaction => {
-		if(!interaction.isCommand) return;
+		if (!interaction.isCommand()) return;
+		if (interaction.commandName === 'clearchat') {
+			// check roles
+			if (interaction.member.roles.cache.some(r => r.name === 'Moderators')) {
+
+
+				interaction.channel.messages.fetch({ limit: 100 }).then(messages => {
+					messages.forEach(message => {
+						message.delete().then(() => {
+							interaction.reply("Chat Cleared").catch(err => { });
+
+						}).catch(err => { });
+					})
+				}
+				)
+			}
+			else{
+				interaction.reply("Sorry! You are not a Moderator").catch(err => { });
+			}
+
+		}
+	});
+	client.on('interactionCreate', async interaction => {
+		if (!interaction.isCommand) return;
 		if (!interaction.isButton) return;
-		if(interaction.customId === 'offline'){
-			interaction.reply({files: [
-				'oftimetable.jpeg'
-			]})
+		if (interaction.customId === 'offline') {
+			interaction.reply({
+				files: [
+					'oftimetable.jpeg'
+				]
+			})
 		}
-		if(interaction.customId === 'online'){
-			interaction.reply({files: [
-				'ontimetable.jpg'
-			]})
+		if (interaction.customId === 'online') {
+			interaction.reply({
+				files: [
+					'ontimetable.jpg'
+				]
+			})
 		}
-	
+
 	})
 	client.on('interactionCreate', async interaction => {
 		if (!interaction.isCommand) return;
@@ -238,10 +266,10 @@ axios.get(API_URL).then((response) => {
 		if (interaction.customId === 'tbce') {
 
 			newData[0].forEach(element => {
-				if (element.sub == 'BCE' && element.type=='text') {
+				if (element.sub == 'BCE' && element.type == 'text') {
 
-					
-	
+
+
 					interaction.channel.send(element.link).catch(err => { });
 					flag = true
 				}
@@ -258,10 +286,10 @@ axios.get(API_URL).then((response) => {
 		if (interaction.customId === 'tbme') {
 
 			newData[0].forEach(element => {
-				if (element.sub == 'BME' && element.type=='text') {
+				if (element.sub == 'BME' && element.type == 'text') {
 
-					
-	
+
+
 					interaction.channel.send(element.link).catch(err => { });
 					flag = true
 				}
@@ -276,7 +304,7 @@ axios.get(API_URL).then((response) => {
 
 		}
 		if (interaction.customId === 'bme') {
-			
+
 			newData[0].forEach(element => {
 				if (element.sub == 'BME') {
 					interaction.reply("Use the command /getnotes/<Topic Code> to get notes of specific topic!").catch(err => { });
@@ -306,10 +334,10 @@ axios.get(API_URL).then((response) => {
 		if (interaction.customId === 'tls') {
 
 			newData[0].forEach(element => {
-				if (element.sub == 'LS' && element.type=='text') {
+				if (element.sub == 'LS' && element.type == 'text') {
 
-					
-	
+
+
 					interaction.channel.send(element.link).catch(err => { });
 					flag = true
 				}
@@ -324,7 +352,7 @@ axios.get(API_URL).then((response) => {
 
 		}
 		if (interaction.customId === 'ls') {
-			
+
 			newData[0].forEach(element => {
 				if (element.sub == 'LS') {
 					interaction.reply("Use the command /getnotes/<Topic Code> to get notes of specific topic!").catch(err => { });
@@ -352,10 +380,10 @@ axios.get(API_URL).then((response) => {
 		if (interaction.customId === 'tem') {
 
 			newData[0].forEach(element => {
-				if (element.sub == 'EM' && element.type=='text') {
+				if (element.sub == 'EM' && element.type == 'text') {
 
-					
-	
+
+
 					interaction.channel.send(element.link).catch(err => { });
 					flag = true
 				}
@@ -370,7 +398,7 @@ axios.get(API_URL).then((response) => {
 
 		}
 		if (interaction.customId === 'em') {
-			
+
 			newData[0].forEach(element => {
 				if (element.sub == 'EM') {
 					interaction.reply("Use the command /getnotes/<Topic Code> to get notes of specific topic!").catch(err => { });
@@ -398,10 +426,10 @@ axios.get(API_URL).then((response) => {
 		if (interaction.customId === 'tpss') {
 
 			newData[0].forEach(element => {
-				if (element.sub == 'PSS' && element.type=='text') {
+				if (element.sub == 'PSS' && element.type == 'text') {
 
-					
-	
+
+
 					interaction.channel.send(element.link).catch(err => { });
 					flag = true
 				}
@@ -416,7 +444,7 @@ axios.get(API_URL).then((response) => {
 
 		}
 		if (interaction.customId === 'pss') {
-			
+
 			newData[0].forEach(element => {
 				if (element.sub == 'PSS') {
 					interaction.reply("Use the command /getnotes/<Topic Code> to get notes of specific topic!").catch(err => { });
@@ -444,10 +472,10 @@ axios.get(API_URL).then((response) => {
 		if (interaction.customId === 'tlca') {
 
 			newData[0].forEach(element => {
-				if (element.sub == 'LCA' && element.type=='text') {
+				if (element.sub == 'LCA' && element.type == 'text') {
 
-					
-	
+
+
 					interaction.channel.send(element.link).catch(err => { });
 					flag = true
 				}
@@ -462,7 +490,7 @@ axios.get(API_URL).then((response) => {
 
 		}
 		if (interaction.customId === 'lca') {
-			
+
 			newData[0].forEach(element => {
 				if (element.sub == 'LSA') {
 					interaction.reply("Use the command /getnotes/<Topic Code> to get notes of specific topic!").catch(err => { });
