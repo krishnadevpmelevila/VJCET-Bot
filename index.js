@@ -13,6 +13,9 @@ const express = require('express');
 const app = express();
 app.listen(3000, () => console.log('Example app listening on port 3000!'))
 app.get('/', (req, res) => res.send('Hello World!'))
+// import js file
+const create = require('./initiate');
+// import module
 
 config();
 
@@ -47,85 +50,52 @@ axios.get(API_URL).then((response) => {
 	store.push({ data: response.data })
 	newData.push(store[0].data)
 
+	
 	client.on('interactionCreate', async interaction => {
-		if (!interaction.isCommand()) return;
-		if (interaction.commandName === 'getnotes') {
-			const data = new SlashCommandBuilder()
-				.setName('getnotes')
-
+		if (!interaction.isCommand()) return
+		if (interaction.commandName == 'notes') {
+			backFromFuncion = create.start('notes',interaction)
 		}
+		await interaction.reply({
+			content: 'Select Subject!', components: [backFromFuncion]
+		});
 	});
-
 	client.on('interactionCreate', async interaction => {
-		flag = false
-		if (!interaction.isCommand()) return;
-
-		if (interaction.commandName === 'notes') {
-
-			const row = new MessageActionRow()
-				.addComponents(
-					new MessageButton()
-						.setCustomId('bce')
-						.setLabel('BCE')
-						.setStyle('PRIMARY'),
-					new MessageButton()
-						.setCustomId('bme')
-						.setLabel('BME')
-						.setStyle('PRIMARY'),
-					new MessageButton()
-						.setCustomId('ls')
-						.setLabel('LS')
-						.setStyle('PRIMARY'),
-					new MessageButton()
-						.setCustomId('em')
-						.setLabel('EM')
-						.setStyle('PRIMARY'),
-					new MessageButton()
-						.setCustomId('others')
-						.setLabel('Others')
-						.setStyle('PRIMARY'),
-				);
-
+		if (!interaction.isCommand()) return
+		if (interaction.commandName == 'capsule') {
+			backFromFuncion = create.start('capsule',interaction)
 			await interaction.reply({
-				content: 'Select Subject!', components: [row]
+				content: 'Select Subject!', components: [backFromFuncion]
 			});
 		}
+		
 	});
 	client.on('interactionCreate', async interaction => {
-		flag = false
-		if (!interaction.isCommand()) return;
-
-		if (interaction.commandName === 'texts') {
-
-			const row = new MessageActionRow()
-				.addComponents(
-					new MessageButton()
-						.setCustomId('tbce')
-						.setLabel('BCE')
-						.setStyle('PRIMARY'),
-					new MessageButton()
-						.setCustomId('tbme')
-						.setLabel('BME')
-						.setStyle('PRIMARY'),
-					new MessageButton()
-						.setCustomId('tls')
-						.setLabel('LS')
-						.setStyle('PRIMARY'),
-					new MessageButton()
-						.setCustomId('tem')
-						.setLabel('EM')
-						.setStyle('PRIMARY'),
-					new MessageButton()
-						.setCustomId('tothers')
-						.setLabel('Others')
-						.setStyle('PRIMARY'),
-				);
-
+		if (!interaction.isCommand()) return
+		if (interaction.commandName == 'seriesqp') {
+			backFromFuncion = create.start('seriesqp',interaction)
 			await interaction.reply({
-				content: 'Select Subject To Get Text!', components: [row]
+				content: 'Select Subject!', components: [backFromFuncion]
 			});
 		}
+		
 	});
+	client.on('interactionCreate', async interaction => {
+		if (!interaction.isCommand()) return
+		if (interaction.commandName == 'imp') {
+			backFromFuncion = create.start('imp',interaction)
+			await interaction.reply({
+				content: 'Select Subject!', components: [backFromFuncion]
+			});
+		}
+		
+	});
+	
+
+
+
+
+	//Code for timetable
 	client.on('interactionCreate', async interaction => {
 
 		if (!interaction.isCommand()) return;
@@ -151,25 +121,11 @@ axios.get(API_URL).then((response) => {
 
 		}
 	});
-	client.on('interactionCreate', async interaction => {
+// end code for timetable
 
-		if (!interaction.isCommand()) return;
 
-		if (interaction.commandName === 'getnotes') {
-			const string = interaction.options.getString('input');
 
-			newData[0].forEach(element => {
-				if (element.uuid == string) {
-					interaction.reply(element.link).catch(err => { });
-					flag = true
-				}
-
-			});
-			if (!flag) {
-				interaction.reply("No notes available").catch(err => { });
-			}
-		}
-	});
+	// Help start
 	client.on('interactionCreate', async interaction => {
 		if (!interaction.isCommand()) return;
 		if (interaction.commandName === 'help') {
@@ -189,6 +145,9 @@ axios.get(API_URL).then((response) => {
 			interaction.reply({ embeds: [exampleEmbed] });
 		}
 	});
+	// Help Stop
+
+	// Clear chat start
 	client.on('interactionCreate', async interaction => {
 		if (!interaction.isCommand()) return;
 		if (interaction.commandName === 'clearchat') {
@@ -212,6 +171,9 @@ axios.get(API_URL).then((response) => {
 
 		}
 	});
+	// clear chat stop
+
+	// send timetable start
 	client.on('interactionCreate', async interaction => {
 		if (!interaction.isCommand) return;
 		if (!interaction.isButton) return;
@@ -231,311 +193,97 @@ axios.get(API_URL).then((response) => {
 		}
 
 	})
+	// send timetable stop
+
+	// send data start
 	client.on('interactionCreate', async interaction => {
 		if (!interaction.isCommand) return;
 		if (!interaction.isButton) return;
+	if (interaction.customId === 'notesbce') {
+		create.getdata('BCE','note',newData,interaction)
+	}
+	if (interaction.customId === 'notesbme') {
 
+		create.getdata('BME','note',newData,interaction)
+	}
+	
+	if (interaction.customId === 'notesls') {
 
-		if (interaction.customId === 'bce') {
+		create.getdata('LS','note',newData,interaction)
 
-			newData[0].forEach(element => {
-				if (element.sub == 'BCE') {
+	}
+		
+	if (interaction.customId === 'notesem') {
 
-					interaction.reply("Use the command /getnotes/<Topic Code> to get notes of specific topic!").catch(err => { });
-					const exampleEmbed = new MessageEmbed()
-						.setColor('#0099ff')
-						.setTitle(`Topic: ${element.name} (Topic Code: ${element.uuid}) `)
-						.setDescription(`Use the command /getnotes/${element.uuid} to get notes of this topic!`)
-						.addFields(
-							{ name: `Topic: ${element.name} | Date:${element.date} | Topic Code: ${element.uuid}`, value: ` Topic Code: ${element.uuid}` },
-						)
-						.setTimestamp()
-					interaction.channel.send({ embeds: [exampleEmbed] }).catch(err => { });
-					flag = true
-				}
+		create.getdata('EM','note',newData,interaction)
+	}
+		
+	if (interaction.customId === 'notespss') {
 
+		create.getdata('PSS','note',newData,interaction)
 
-			});
-			if (!flag) {
-				interaction.reply("No notes available").catch(err => { });
-			}
 
 
+	}
+	
+	if (interaction.customId === 'noteslca') {
 
-		}
-		if (interaction.customId === 'tbce') {
+		create.getdata('LS','note',newData,interaction)
+	}
 
-			newData[0].forEach(element => {
-				if (element.sub == 'BCE' && element.type == 'text') {
+// send data stop
 
 
 
-					interaction.channel.send(element.link).catch(err => { });
-					flag = true
-				}
 
 
-			});
-			if (!flag) {
-				interaction.reply("No texts available").catch(err => { });
-			}
 
 
 
-		}
-		if (interaction.customId === 'tbme') {
+// OTHER BUTTON CONFIGRATION FOR EACH COMMANDS
 
-			newData[0].forEach(element => {
-				if (element.sub == 'BME' && element.type == 'text') {
 
+	if (interaction.customId === 'notesothers') {
+		const row = new MessageActionRow()
+			.addComponents(
+				new MessageButton()
+					.setCustomId('noteslca')
+					.setLabel('LC and A')
+					.setStyle('PRIMARY'),
+				new MessageButton()
+					.setCustomId('notespss')
+					.setLabel('PSS')
+					.setStyle('PRIMARY'),
 
 
-					interaction.channel.send(element.link).catch(err => { });
-					flag = true
-				}
+			);
 
+		await interaction.reply({
+			content: 'Select Subject To Get Texts!', components: [row]
+		});
+	}
+	if (interaction.customId === 'impothers') {
+		const row = new MessageActionRow()
+			.addComponents(
+				new MessageButton()
+					.setCustomId('implca')
+					.setLabel('LC and A')
+					.setStyle('PRIMARY'),
+				new MessageButton()
+					.setCustomId('imppss')
+					.setLabel('PSS')
+					.setStyle('PRIMARY'),
 
-			});
-			if (!flag) {
-				interaction.reply("No texts available").catch(err => { });
-			}
 
+			);
 
+		await interaction.reply({
+			content: 'Select Subject To Get Texts!', components: [row]
+		});
+	}
+	
 
-		}
-		if (interaction.customId === 'bme') {
-
-			newData[0].forEach(element => {
-				if (element.sub == 'BME') {
-					interaction.reply("Use the command /getnotes/<Topic Code> to get notes of specific topic!").catch(err => { });
-					const exampleEmbed = new MessageEmbed()
-						.setColor('#0099ff')
-						.setTitle(`Topic: ${element.name} (Topic Code: ${element.uuid}) `)
-						.setDescription(`Use the command /getnotes/${element.uuid} to get notes of this topic!`)
-						.addFields(
-							{ name: `Topic: ${element.name} | Date:${element.date} | Topic Code: ${element.uuid}`, value: ` Topic Code: ${element.uuid}` },
-						)
-						.setTimestamp()
-					interaction.channel.send({ embeds: [exampleEmbed] }).catch(err => { });
-				} else {
-					interaction.reply("No notes available").catch(err => { });
-					flag = 1
-				}
-
-
-			});
-			if (!flag) {
-				interaction.reply("No notes available").catch(err => { });
-			}
-
-
-
-		}
-		if (interaction.customId === 'tls') {
-
-			newData[0].forEach(element => {
-				if (element.sub == 'LS' && element.type == 'text') {
-
-
-
-					interaction.channel.send(element.link).catch(err => { });
-					flag = true
-				}
-
-
-			});
-			if (!flag) {
-				interaction.reply("No texts available").catch(err => { });
-			}
-
-
-
-		}
-		if (interaction.customId === 'ls') {
-
-			newData[0].forEach(element => {
-				if (element.sub == 'LS') {
-					interaction.reply("Use the command /getnotes/<Topic Code> to get notes of specific topic!").catch(err => { });
-					const exampleEmbed = new MessageEmbed()
-						.setColor('#0099ff')
-						.setTitle(`Topic: ${element.name} (Topic Code: ${element.uuid}) `)
-						.setDescription(`Use the command /getnotes/${element.uuid} to get notes of this topic!`)
-						.addFields(
-							{ name: `Topic: ${element.name} | Date:${element.date} | Topic Code: ${element.uuid}`, value: ` Topic Code: ${element.uuid}` },
-						)
-						.setTimestamp()
-					interaction.channel.send({ embeds: [exampleEmbed] }).catch(err => { });
-					flag = 1
-				}
-
-
-			});
-			if (!flag) {
-				interaction.reply("No notes available").catch(err => { });
-			}
-
-
-
-		}
-		if (interaction.customId === 'tem') {
-
-			newData[0].forEach(element => {
-				if (element.sub == 'EM' && element.type == 'text') {
-
-
-
-					interaction.channel.send(element.link).catch(err => { });
-					flag = true
-				}
-
-
-			});
-			if (!flag) {
-				interaction.reply("No texts available").catch(err => { });
-			}
-
-
-
-		}
-		if (interaction.customId === 'em') {
-
-			newData[0].forEach(element => {
-				if (element.sub == 'EM') {
-					interaction.reply("Use the command /getnotes/<Topic Code> to get notes of specific topic!").catch(err => { });
-					const exampleEmbed = new MessageEmbed()
-						.setColor('#0099ff')
-						.setTitle(`Topic: ${element.name} (Topic Code: ${element.uuid}) `)
-						.setDescription(`Use the command /getnotes/${element.uuid} to get notes of this topic!`)
-						.addFields(
-							{ name: `Topic: ${element.name} | Date:${element.date} | Topic Code: ${element.uuid}`, value: ` Topic Code: ${element.uuid}` },
-						)
-						.setTimestamp()
-					interaction.channel.send({ embeds: [exampleEmbed] }).catch(err => { });
-					flag = 1
-				}
-
-
-			});
-			if (!flag) {
-				interaction.reply("No notes available").catch(err => { });
-			}
-
-
-
-		}
-		if (interaction.customId === 'tpss') {
-
-			newData[0].forEach(element => {
-				if (element.sub == 'PSS' && element.type == 'text') {
-
-
-
-					interaction.channel.send(element.link).catch(err => { });
-					flag = true
-				}
-
-
-			});
-			if (!flag) {
-				interaction.reply("No text available").catch(err => { });
-			}
-
-
-
-		}
-		if (interaction.customId === 'pss') {
-
-			newData[0].forEach(element => {
-				if (element.sub == 'PSS') {
-					interaction.reply("Use the command /getnotes/<Topic Code> to get notes of specific topic!").catch(err => { });
-					const exampleEmbed = new MessageEmbed()
-						.setColor('#0099ff')
-						.setTitle(`Topic: ${element.name} (Topic Code: ${element.uuid}) `)
-						.setDescription(`Use the command /getnotes/${element.uuid} to get notes of this topic!`)
-						.addFields(
-							{ name: `Topic: ${element.name} | Date:${element.date} | Topic Code: ${element.uuid}`, value: ` Topic Code: ${element.uuid}` },
-						)
-						.setTimestamp()
-					interaction.channel.send({ embeds: [exampleEmbed] }).catch(err => { });
-					flag = 1
-				}
-
-
-			});
-			if (!flag) {
-				interaction.reply("No notes available").catch(err => { });
-			}
-
-
-
-		}
-		if (interaction.customId === 'tlca') {
-
-			newData[0].forEach(element => {
-				if (element.sub == 'LCA' && element.type == 'text') {
-
-
-
-					interaction.channel.send(element.link).catch(err => { });
-					flag = true
-				}
-
-
-			});
-			if (!flag) {
-				interaction.reply("No texts available").catch(err => { });
-			}
-
-
-
-		}
-		if (interaction.customId === 'lca') {
-
-			newData[0].forEach(element => {
-				if (element.sub == 'LSA') {
-					interaction.reply("Use the command /getnotes/<Topic Code> to get notes of specific topic!").catch(err => { });
-					const exampleEmbed = new MessageEmbed()
-						.setColor('#0099ff')
-						.setTitle(`Topic: ${element.name} (Topic Code: ${element.uuid}) `)
-						.setDescription(`Use the command /getnotes/${element.uuid} to get notes of this topic!`)
-						.addFields(
-							{ name: `Topic: ${element.name} | Date:${element.date} | Topic Code: ${element.uuid}`, value: ` Topic Code: ${element.uuid}` },
-						)
-						.setTimestamp()
-					interaction.channel.send({ embeds: [exampleEmbed] }).catch(err => { });
-					flag = 1
-				}
-
-
-			});
-			if (!flag) {
-				interaction.reply("No notes available").catch(err => { });
-			}
-
-
-
-		}
-		if (interaction.customId === 'tothers') {
-			const row = new MessageActionRow()
-				.addComponents(
-					new MessageButton()
-						.setCustomId('tlca')
-						.setLabel('LC and A')
-						.setStyle('PRIMARY'),
-					new MessageButton()
-						.setCustomId('tpss')
-						.setLabel('PSS')
-						.setStyle('PRIMARY'),
-
-
-				);
-
-			await interaction.reply({
-				content: 'Select Subject To Get Texts!', components: [row]
-			});
-		}
-
-	})
+})
 
 
 	client.login(token);
