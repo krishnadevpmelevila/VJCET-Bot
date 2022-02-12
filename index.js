@@ -45,7 +45,20 @@ client.commands = new Collection();
 
 
 
-axios.get(API_URL).then((response) => {
+axios.post(process.env.API_URL + '/login	', {
+
+
+	email: process.env.USER_NAME,
+	password: process.env.PASS
+
+
+  }).then(function(response) {
+	  
+	axios.get(process.env.API_URL + '/data', {
+	  headers: {
+		'x-access-token': response.data.token
+	  }
+	}).then((response) => {
 
 	store.push({ data: response.data })
 	newData.push(store[0].data)
@@ -55,10 +68,11 @@ axios.get(API_URL).then((response) => {
 		if (!interaction.isCommand()) return
 		if (interaction.commandName == 'notes') {
 			backFromFuncion = create.start('notes',interaction)
-		}
-		await interaction.reply({
-			content: 'Select Subject!', components: [backFromFuncion]
-		});
+			await interaction.reply({
+				content: 'Select Subject!', components: [backFromFuncion]
+			});
+		} 	
+		
 	});
 	client.on('interactionCreate', async interaction => {
 		if (!interaction.isCommand()) return
@@ -82,15 +96,34 @@ axios.get(API_URL).then((response) => {
 	});
 	client.on('interactionCreate', async interaction => {
 		if (!interaction.isCommand()) return
-		if (interaction.commandName == 'imp') {
-			backFromFuncion = create.start('imp',interaction)
+		if (interaction.commandName == 'impquestion') {
+			backFromFuncion = create.start('impquestion',interaction)
 			await interaction.reply({
 				content: 'Select Subject!', components: [backFromFuncion]
 			});
 		}
 		
 	});
-	
+	client.on('interactionCreate', async interaction => {
+		if (!interaction.isCommand()) return
+		if (interaction.commandName == 'youtubechannels') {
+			backFromFuncion = create.start('youtubechannels',interaction)
+			await interaction.reply({
+				content: 'Select Subject!', components: [backFromFuncion]
+			});
+		}
+		
+	});
+	client.on('interactionCreate', async interaction => {
+		if (!interaction.isCommand()) return
+		if (interaction.commandName == 'questionp') {
+			backFromFuncion = create.start('questionp',interaction)
+			await interaction.reply({
+				content: 'Select Subject!', components: [backFromFuncion]
+			});
+		}
+		
+	});
 
 
 
@@ -121,6 +154,7 @@ axios.get(API_URL).then((response) => {
 
 		}
 	});
+});
 // end code for timetable
 
 
@@ -134,9 +168,12 @@ axios.get(API_URL).then((response) => {
 				.setTitle('Help Menu')
 				.setDescription('Use commands like below')
 				.addFields(
-					{ name: 'Get all notes of specific subjects', value: '/notes' },
-					{ name: 'Get Notes of specific topic', value: '/getnotes/<Topic Code>', },
-					{ name: 'Get Text of specific Subjects', value: '/texts', },
+					{ name: 'Get notes', value: '/notes' },
+					{ name: 'Get short capsule notes', value: '/capsule' },
+					{ name: 'Get question paper', value: '/questionp' },
+					{ name: 'Get important questions', value: '/impquestion', },
+					{ name: 'Get youtube channels', value: '/youtubechannels' },
+					{ name: 'Get series test question paper of MODEL ENGINEERING COLLEGE THRIKKKARA', value: '/seriesqp' },
 					{ name: 'Get Timetable Of CSEA S1', value: '/timetable', },
 					{ name: 'Clear all chats (Only For Moderators)', value: '/clearchat', }
 				)
@@ -194,43 +231,34 @@ axios.get(API_URL).then((response) => {
 
 	})
 	// send timetable stop
-
+	subjects=['pss','ls','lca','bme','bce','chem','em']
+	subjectcode=['PSS','LS','LSA','BME','BCE','CHEM','EM']
 	// send data start
 	client.on('interactionCreate', async interaction => {
 		if (!interaction.isCommand) return;
 		if (!interaction.isButton) return;
-	if (interaction.customId === 'notesbce') {
-		create.getdata('BCE','note',newData,interaction)
-	}
-	if (interaction.customId === 'notesbme') {
-
-		create.getdata('BME','note',newData,interaction)
-	}
+		// loop through subjects
+		for (let i = 0; i < subjects.length; i++) {
+			if (interaction.customId === 'notes'+subjects[i]) {
+				create.getdata(subjectcode[i],'note',newData,interaction)
+			}
+			if (interaction.customId === 'capsule'+subjects[i]) {
+				create.getdata(subjectcode[i],'capsule',newData,interaction)
+			}
+			if (interaction.customId === 'questionp'+subjects[i]) {
+				create.getdata(subjectcode[i],'questionp',newData,interaction)
+			}
+			if (interaction.customId === 'impquestion'+subjects[i]) {
+				create.getdata(subjectcode[i],'impquestion',newData,interaction)
+			}
+			if (interaction.customId === 'youtubeChannels'+subjects[i]) {
+				create.getdata(subjectcode[i],'youtubeChannels',newData,interaction)
+			}
+			if (interaction.customId === 'seriesqp'+subjects[i]) {
+				create.getdata(subjectcode[i],'seriesqp',newData,interaction)
+			}
+		}
 	
-	if (interaction.customId === 'notesls') {
-
-		create.getdata('LS','note',newData,interaction)
-
-	}
-		
-	if (interaction.customId === 'notesem') {
-
-		create.getdata('EM','note',newData,interaction)
-	}
-		
-	if (interaction.customId === 'notespss') {
-
-		create.getdata('PSS','note',newData,interaction)
-
-
-
-	}
-	
-	if (interaction.customId === 'noteslca') {
-
-		create.getdata('LS','note',newData,interaction)
-	}
-
 // send data stop
 
 
@@ -242,45 +270,34 @@ axios.get(API_URL).then((response) => {
 
 // OTHER BUTTON CONFIGRATION FOR EACH COMMANDS
 
-
-	if (interaction.customId === 'notesothers') {
-		const row = new MessageActionRow()
-			.addComponents(
-				new MessageButton()
-					.setCustomId('noteslca')
-					.setLabel('LC and A')
-					.setStyle('PRIMARY'),
-				new MessageButton()
-					.setCustomId('notespss')
-					.setLabel('PSS')
-					.setStyle('PRIMARY'),
-
-
-			);
-
-		await interaction.reply({
-			content: 'Select Subject To Get Texts!', components: [row]
-		});
-	}
-	if (interaction.customId === 'impothers') {
-		const row = new MessageActionRow()
-			.addComponents(
-				new MessageButton()
-					.setCustomId('implca')
-					.setLabel('LC and A')
-					.setStyle('PRIMARY'),
-				new MessageButton()
-					.setCustomId('imppss')
-					.setLabel('PSS')
+	typearray=['capsule','notes','questionp','impquestion','youtubeChannels','seriesqp']
+	// loop through typearray
+	for (let i = 0; i < typearray.length; i++) {
+		if (interaction.customId === typearray[i]+'others') {
+			const row = new MessageActionRow()
+				.addComponents(
+					new MessageButton()
+						.setCustomId(typearray[i]+'lca')
+						.setLabel('LC and A')
+						.setStyle('PRIMARY'),
+					new MessageButton()
+						.setCustomId(typearray[i]+'pss')
+						.setLabel('PSS')
+						.setStyle('PRIMARY'),
+					new MessageButton()
+					.setCustomId(typearray[i]+'chem')
+					.setLabel('CHEM')
 					.setStyle('PRIMARY'),
 
 
-			);
+				);
 
-		await interaction.reply({
-			content: 'Select Subject To Get Texts!', components: [row]
-		});
-	}
+			await interaction.reply({
+				content: 'Select Subject To Get Texts!', components: [row]
+			});
+		}
+}
+	
 	
 
 })

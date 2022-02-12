@@ -6,15 +6,15 @@ const { SlashCommandBuilder } = require('@discordjs/builders');
 
 
 const commands = [
-  new SlashCommandBuilder().setName('notes').setDescription('Get all Notes of Subject'),
-  new SlashCommandBuilder().setName('texts').setDescription('Get all Texts of Subject'),
-  new SlashCommandBuilder().setName('imp').setDescription('Get important questions of Subject'),
   new SlashCommandBuilder().setName('help').setDescription('Get all Commands'),
   new SlashCommandBuilder().setName('clearchat').setDescription('Clear all chats on this channel'),
-  new SlashCommandBuilder().setName('getnotes').setDescription('Get Specific Notes').addStringOption(option => option.setName('input').setDescription('Enter Topic Code').setRequired(true)),
   new SlashCommandBuilder().setName('timetable').setDescription('Get Timetable'),
   new SlashCommandBuilder().setName('capsule').setDescription('Get Capsules'),
-  new SlashCommandBuilder().setName('seriesqp').setDescription('Get series model question paper')
+  new SlashCommandBuilder().setName('questionp').setDescription('Get question paper'),
+  new SlashCommandBuilder().setName('notes').setDescription('Get all Notes and Text of Subject'),
+  new SlashCommandBuilder().setName('impquestion').setDescription('Get important questions of Subject'),
+  new SlashCommandBuilder().setName('seriesqp').setDescription('Get series model question paper'),
+  new SlashCommandBuilder().setName('youtubechannels').setDescription('Get series model question paper')
 
 
 ]
