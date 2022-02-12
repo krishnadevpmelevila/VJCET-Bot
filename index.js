@@ -251,8 +251,8 @@ axios.post(process.env.API_URL + '/login	', {
 			if (interaction.customId === 'impquestion'+subjects[i]) {
 				create.getdata(subjectcode[i],'impquestion',newData,interaction)
 			}
-			if (interaction.customId === 'youtubeChannels'+subjects[i]) {
-				create.getdata(subjectcode[i],'youtubeChannels',newData,interaction)
+			if (interaction.customId === 'youtubechannels'+subjects[i]) {
+				create.getdata(subjectcode[i],'youtubechannels',newData,interaction)
 			}
 			if (interaction.customId === 'seriesqp'+subjects[i]) {
 				create.getdata(subjectcode[i],'seriesqp',newData,interaction)
@@ -270,7 +270,7 @@ axios.post(process.env.API_URL + '/login	', {
 
 // OTHER BUTTON CONFIGRATION FOR EACH COMMANDS
 
-	typearray=['capsule','notes','questionp','impquestion','youtubeChannels','seriesqp']
+	typearray=['capsule','notes','questionp','impquestion','youtubechannels','seriesqp']
 	// loop through typearray
 	for (let i = 0; i < typearray.length; i++) {
 		if (interaction.customId === typearray[i]+'others') {
