@@ -252,7 +252,7 @@ axios.post(process.env.API_URL + '/login	', {
 				create.getdata(subjectcode[i],'impquestion',newData,interaction)
 			}
 			if (interaction.customId === 'youtubechannels'+subjects[i]) {
-				create.getdata(subjectcode[i],'youtubechannels',newData,interaction)
+				create.getdata(subjectcode[i],'youtubeChannels',newData,interaction)
 			}
 			if (interaction.customId === 'seriesqp'+subjects[i]) {
 				create.getdata(subjectcode[i],'seriesqp',newData,interaction)
